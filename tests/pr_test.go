@@ -10,7 +10,8 @@ import (
 
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
-const advancedExampleDir = "examples/advanced"
+const basicExampleDir = "examples/basic-no-config"
+const region = "us-east"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
@@ -18,14 +19,16 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		TerraformDir:  dir,
 		Prefix:        prefix,
 		ResourceGroup: resourceGroup,
+		Region:        region,
 	})
 	return options
 }
 
-func TestRunAdvancedExample(t *testing.T) {
+func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
+	t.Skip("Skipping test until available in production IBM Cloud.")
 
-	options := setupOptions(t, "mod-template", advancedExampleDir)
+	options := setupOptions(t, "ease", basicExampleDir)
 
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
@@ -34,8 +37,9 @@ func TestRunAdvancedExample(t *testing.T) {
 
 func TestRunUpgradeExample(t *testing.T) {
 	t.Parallel()
+	t.Skip("Skipping test until available in production IBM Cloud.")
 
-	options := setupOptions(t, "mod-template-upg", advancedExampleDir)
+	options := setupOptions(t, "ease-upgrade", basicExampleDir)
 
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {

@@ -1,5 +1,5 @@
 <!-- Update this title with a descriptive name. Use sentence case. -->
-# Terraform modules template project
+# IBM Enterprise Application Service for Java (EASeJava)
 
 <!--
 Update status and "latest release" badges:
@@ -20,7 +20,7 @@ For information, see "Module names and descriptions" at
 https://terraform-ibm-modules.github.io/documentation/#/implementation-guidelines?id=module-names-and-descriptions
 -->
 
-TODO: Replace this with a description of the modules in this repo.
+Use this module to provision and configure an IBM [Enterprise Application Service](https://test.cloud.ibm.com/catalog/services/ease).
 
 
 <!-- The following content is automatically populated by the pre-commit hook -->
@@ -28,8 +28,7 @@ TODO: Replace this with a description of the modules in this repo.
 ## Overview
 * [terraform-ibm-ease](#terraform-ibm-ease)
 * [Examples](./examples)
-    * [Advanced example](./examples/advanced)
-    * [Basic example](./examples/basic)
+    * [Basic example](./examples/basic-no-config)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
@@ -42,6 +41,22 @@ https://terraform-ibm-modules.github.io/documentation/#/implementation-guideline
 -->
 <!-- ## Reference architectures -->
 
+## Prerequisites
+Must have these created prior to using this terraform code:
+
+1. IBM Cloud API Key (https://test.cloud.ibm.com/iam/apikeys)
+2. Resource Group ID (https://test.cloud.ibm.com/account/resource-groups)
+
+Optionally, the following are required if you want to configure the EASeJava instance:
+
+1. Source and Config Repos (for the EASeJava instance)
+2. GitHub Application currently called IBM Appflow Dev (https://github.com/apps/ibm-appflow-dev-ibm-cloud/installations/new)
+
+**NOTE:** For example source and config repositories that can be forked, see the below repositories:
+
+https://github.com/IBMAppFlowTest/sample-getting-started
+
+https://github.com/IBMAppFlowTest/sample-getting-started-config
 
 <!-- Replace this heading with the name of the root level module (the repo name) -->
 ## terraform-ibm-ease
@@ -56,8 +71,24 @@ unless real values don't help users know what to change.
 -->
 
 ```hcl
+provider "ibm" {
+  ibmcloud_api_key = "XXXXXXXXXX"
+}
 
+module "ease_module" {
+  source            = "terraform-ibm-modules/ease/ibm"
+  version           = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  name              = "ease_XXX"
+  resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
+  tags              = []
+  plan              = "free"
+  region            = "us-east"
+  source_repo       = "http://xxxxx"
+  config_repo       = "http://xxxxx"
+}
 ```
+
+
 
 ### Required IAM access policies
 
@@ -86,7 +117,7 @@ If no permissions are required for the module, uncomment the following
 statement instead the previous block.
 -->
 
-<!-- No permissions are needed to run this module.-->
+No permissions are needed to run this module.
 
 
 <!-- The following content is automatically populated by the pre-commit hook -->
@@ -96,6 +127,7 @@ statement instead the previous block.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.67.0 |
 
 ### Modules
 
@@ -103,15 +135,27 @@ No modules.
 
 ### Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [ibm_resource_instance.ease_instance](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/resource_instance) | resource |
 
 ### Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_ease_name"></a> [ease\_name](#input\_ease\_name) | Name for the newly provisioned IBM Enterprise Application Service. | `string` | n/a | yes |
+| <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group to use for the creation of IBM Enterprise Application Service (https://test.cloud.ibm.com/account/resource-groups). | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | Metadata labels for IBM Enterprise Application Service, i.e. test. | `list(string)` | `[]` | no |
+| <a name="input_source_repo"></a> [source\_repo](#input\_source\_repo) | URL for IBM Enterprise Application Service source code. | `string` | `null` | no |
+| <a name="input_config_repo"></a> [config\_repo](#input\_config\_repo) | URL for IBM Enterprise Application Service configuration code. | `string` | `null` | no |
+| <a name="input_plan"></a> [plan](#input\_plan) | Desired pricing plan for IBM Enterprise Application Service. | `string` | `free` | yes |
+| <a name="input_region"></a> [region](#input\_region) | Desired region for IBM Enterprise Application Service. | `string` | `us-east` | yes |
 
 ### Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_ease_name"></a> [ease\_name](#output\_ease\_name) | Name for the newly provisioned IBM Enterprise Application Service. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set-up steps for contributors to follow -->
