@@ -2,7 +2,7 @@
 # Outputs
 ########################################################################################################################
 
-output "ease_instance" {
-  description = "Enterprise Application Service instance"
-  value       = ibm_resource_instance.ease_instance
+output "ease_name" {
+  description = "Name of Enterprise Application Service instance"
+  value       = module.ease.ease_instance.name
 }

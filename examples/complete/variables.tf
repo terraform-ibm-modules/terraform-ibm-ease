@@ -1,31 +1,35 @@
 ########################################################################################################################
-# Input Variables
+# Input variables
 ########################################################################################################################
 
-variable "resource_group_id" {
+variable "ibmcloud_api_key" {
   type        = string
-  description = "The ID of the resource group to use for the creation of the Enterprise Application Service instance (https://test.cloud.ibm.com/account/resource-groups)."
+  description = "The IBM Cloud API Key"
+  sensitive   = true
 }
 
-variable "ease_name" {
-  type        = string
-  description = "The name for the newly provisioned Enterprise Application Service instance."
-}
-
-variable "tags" {
+variable "resource_tags" {
   type        = list(string)
-  description = "Metadata labels describing the service instance, i.e. test"
+  description = "Optional list of tags to be added to created resources"
   default     = []
+}
+
+variable "prefix" {
+  type        = string
+  description = "Prefix to append to all resources created by this example"
+  default     = "ease-complete"
+}
+
+variable "resource_group" {
+  type        = string
+  description = "The name of an existing resource group to provision resources in to. If not set a new resource group will be created using the prefix variable"
+  default     = null
 }
 
 variable "plan" {
   type        = string
   description = "The desired pricing plan for IBM Enterprise Application Service instance."
   default     = "staging"
-  validation {
-    condition     = contains(["trial", "standard", "free", "staging"], var.plan)
-    error_message = "The only values accepted for the plan field are free, standard, staging and trial."
-  }
 }
 
 variable "region" {
